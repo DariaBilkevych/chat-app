@@ -5,10 +5,13 @@ import {
   createChat,
   updateChat,
   deleteChat,
+  searchChats,
 } from '../controllers/chat-controller.js';
 import protectRoute from '../middelware/protect-route.js';
 
 const router = express.Router();
+
+router.get('/search', protectRoute, searchChats);
 
 router.get('/', protectRoute, getAllChats);
 router.get('/:chatId', protectRoute, getOneChat);

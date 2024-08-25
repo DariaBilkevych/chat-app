@@ -7,10 +7,6 @@ export const getAllChats = async (req, res) => {
     const creatorId = req.user._id;
     const chats = await Chat.find({ creatorId });
 
-    if (!chats.length) {
-      return res.status(404).json({ error: 'No chats found!' });
-    }
-
     res.status(200).json(chats);
   } catch (e) {
     console.error('Error retrieving chats:', e.message);
@@ -88,6 +84,17 @@ export const updateChat = async (req, res) => {
         .json({ error: 'At least one of firstname or lastname is required!' });
     }
 
+    const existingChat = await Chat.findOne({
+      'receiver.firstname': firstname,
+      'receiver.lastname': lastname,
+    });
+
+    if (existingChat) {
+      return res
+        .status(400)
+        .json({ error: 'A chat with the given name already exists!' });
+    }
+
     const updateData = {};
     if (firstname) {
       updateData['receiver.firstname'] = firstname;
@@ -128,6 +135,38 @@ export const deleteChat = async (req, res) => {
     res.status(204).send();
   } catch (e) {
     console.error('Error deleting chat:', e.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const searchChats = async (req, res) => {
+  try {
+    const creatorId = req.user._id;
+    const { search } = req.query;
+
+    const query = { creatorId };
+
+    if (search) {
+      // Розділити пошуковий запит на частини
+      const searchTerms = search.split(' ').filter((term) => term.length > 0);
+
+      // Створити масив умов для пошуку
+      const searchConditions = searchTerms.map((term) => ({
+        $or: [
+          { 'receiver.firstname': { $regex: new RegExp(term, 'i') } },
+          { 'receiver.lastname': { $regex: new RegExp(term, 'i') } },
+        ],
+      }));
+
+      // Об'єднати умови для пошуку
+      query.$and = searchConditions;
+    }
+
+    const chats = await Chat.find(query);
+
+    res.status(200).json(chats);
+  } catch (e) {
+    console.error('Error searching chats:', e.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

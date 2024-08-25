@@ -9,14 +9,14 @@ export const signup = async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
 
     if (!emailValidator.validate(email)) {
-      return res.status(400).json({ e: 'Invalid email format!' });
+      return res.status(400).json({ error: 'Invalid email format!' });
     }
 
     const user = await User.findOne({ email });
     if (user) {
       return res
         .status(400)
-        .json({ e: 'User with this email is already exists!' });
+        .json({ error: 'User with this email is already exists!' });
     }
 
     const avatar = `https://robohash.org/${firstname}.png`;

@@ -4,10 +4,12 @@ import MessageInput from './MessageInput';
 import '../../styles/home/Messages.css';
 import useChat from '../../zustand/useChat.js';
 import useGetChats from '../../hooks/useGetChats';
+import { useAuthContext } from '../../context/AuthContext';
 
 const MessageContainer = () => {
   const { selectedChat, setSelectedChat } = useChat();
   const { chats } = useGetChats();
+  const { authUser } = useAuthContext();
 
   useEffect(() => {
     return () => setSelectedChat(null);
@@ -27,6 +29,10 @@ const MessageContainer = () => {
       }
     }
   }, [chats, selectedChat, setSelectedChat]);
+
+  useEffect(() => {
+    setSelectedChat(null);
+  }, [authUser, setSelectedChat]);
 
   return (
     <div className="message-container">

@@ -1,6 +1,7 @@
 import Message from '../models/message-model.js';
 import Chat from '../models/chat-model.js';
 import axios from 'axios';
+import { io } from '../socket/socket.js';
 
 export const sendMessage = async (req, res) => {
   try {
@@ -27,6 +28,8 @@ export const sendMessage = async (req, res) => {
     chat.messages.push(message._id);
     await chat.save();
 
+    io.emit('message', { chatId, message });
+
     setTimeout(async () => {
       try {
         const response = await axios.get('https://api.quotable.io/random');
@@ -42,6 +45,8 @@ export const sendMessage = async (req, res) => {
 
         chat.messages.push(autoResponseMessage._id);
         await chat.save();
+
+        io.emit('message', { chatId, message: autoResponseMessage });
       } catch (error) {
         console.error(
           'Error fetching quote or saving auto-response:',
@@ -54,5 +59,31 @@ export const sendMessage = async (req, res) => {
   } catch (error) {
     console.error('Error sending message:', error.message);
     res.status(500).json({ e: 'Internal server error' });
+  }
+};
+
+export const editMessage = async (req, res) => {
+  try {
+    const { chatId, messageId } = req.params;
+    const { content } = req.body;
+
+    if (!content) {
+      return res.status(400).json({ error: 'Content is required!' });
+    }
+
+    const message = await Message.findById(messageId);
+    if (!message) {
+      return res.status(404).json({ error: 'Message not found!' });
+    }
+
+    message.content = content;
+    await message.save();
+
+    io.to(chatId).emit('message', { chatId, message });
+
+    res.status(200).json(message);
+  } catch (error) {
+    console.error('Error editing message:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

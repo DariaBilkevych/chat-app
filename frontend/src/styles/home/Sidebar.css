@@ -131,6 +131,17 @@
   overflow-y: auto;
 }
 
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
 .chat {
   padding: 12px;
   border-bottom: 1px solid #e5e7eb; 

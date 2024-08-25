@@ -5,6 +5,14 @@ import Chat from './Chat';
 const Chats = () => {
   const { loading, chats } = useGetChats();
 
+  if (loading) {
+    return <div className="loading-spinner"></div>;
+  }
+
+  if (!loading && chats.length === 0) {
+    return <div className="no-chats">No chats available. You can create them!</div>;
+  }
+
   return (
     <div className="chats">
       {chats.map((chat) => {
@@ -15,8 +23,6 @@ const Chats = () => {
           </Chat>
         );
       })}
-
-      {loading ? <div className="loading-spinner"></div> : null}
     </div>
   );
 };

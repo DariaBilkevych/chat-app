@@ -5,7 +5,7 @@ import useChat from '../zustand/useChat.js';
 
 const useAddChat = () => {
   const [loading, setLoading] = useState(false);
-  const { chats, setChats } = useChat();
+  const { chats, setChats, setSelectedChat } = useChat();
 
   const addChat = async (firstname, lastname) => {
     setLoading(true);
@@ -18,9 +18,11 @@ const useAddChat = () => {
       const newChat = res.data;
 
       setChats([...chats, newChat]);
+      setSelectedChat(newChat);
       toast.success('Chat added successfully!');
     } catch (e) {
-      toast.error(e.res?.data?.error || e.message);
+      const errorMessage = e.response?.data?.error || e.message;
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
