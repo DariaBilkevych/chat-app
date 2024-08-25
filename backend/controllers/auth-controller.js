@@ -41,11 +41,11 @@ export const signup = async (req, res) => {
         avatar: newUser.avatar,
       });
     } else {
-      res.status(400).json({ e: 'Invalid user data!' });
+      res.status(400).json({ error: 'Invalid user data!' });
     }
   } catch (e) {
     console.log('Error in signin', e.message);
-    res.status(500).json({ e: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -59,7 +59,7 @@ export const login = async (req, res) => {
     );
 
     if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ e: 'Invalid credentials' });
+      return res.status(400).json({ error: 'Invalid credentials!' });
     }
 
     generateToken(user._id, res);
@@ -73,7 +73,7 @@ export const login = async (req, res) => {
     });
   } catch (e) {
     console.log('Error in login', e.message);
-    res.status(500).json({ e: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -83,6 +83,6 @@ export const logout = (req, res) => {
     res.status(200).json({ message: 'Logged out successfully!' });
   } catch (e) {
     console.log('Error in logout', e.message);
-    res.status(500).json({ e: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };

@@ -24,6 +24,9 @@ export const sendMessage = async (req, res) => {
 
     await message.save();
 
+    chat.messages.push(message._id);
+    await chat.save();
+
     setTimeout(async () => {
       try {
         const response = await axios.get('https://api.quotable.io/random');
@@ -36,6 +39,9 @@ export const sendMessage = async (req, res) => {
         });
 
         await autoResponseMessage.save();
+
+        chat.messages.push(autoResponseMessage._id);
+        await chat.save();
       } catch (error) {
         console.error(
           'Error fetching quote or saving auto-response:',
