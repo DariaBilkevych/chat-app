@@ -29,6 +29,7 @@
 
 .chat-one {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   margin-bottom: 8px;
 }
@@ -53,7 +54,6 @@
   padding: 8px 12px;
   border-radius: 12px;
   color: white;
-  max-width: 60%;
 }
 
 .my-color {
@@ -62,22 +62,6 @@
 
 .another-color {
   background-color: #97b8ec;
-}
-
-.shake {
-  animation: shake 0.5s ease;
-}
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
 }
 
 .chat-message-time {
@@ -113,4 +97,62 @@
   cursor: pointer;
   font-size: 20px;
   margin-left: 8px;
+}
+
+.message-and-edit {
+  display: flex;
+  align-items: center;
+}
+
+.edit-button-chat {
+  background: #ffffff;
+  border: 1px solid #3b82f6;
+  border-radius: 50%;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 8px;
+  margin-right: 8px; 
+}
+
+.edit-textarea {
+  width: 100%;
+  max-width: 90%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  font-size: 14px;
+  align-items: center;
+}
+
+.edit-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.save-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.save-button:disabled {
+  background-color: #9e9e9e;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }

@@ -6,6 +6,7 @@ import useListenMessages from '../../hooks/useListenMessages';
 const Messages = () => {
     const { messages, loading } = useGetMessages();
     useListenMessages();
+
     
     return (
         <div className="messages-container">
@@ -19,5 +20,6 @@ const Messages = () => {
         </div>
     );
 }
+
 
 export default Messages;

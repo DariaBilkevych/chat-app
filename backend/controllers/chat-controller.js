@@ -5,7 +5,7 @@ import Message from '../models/message-model.js';
 export const getAllChats = async (req, res) => {
   try {
     const creatorId = req.user._id;
-    const chats = await Chat.find({ creatorId });
+    const chats = await Chat.find({ creatorId }).populate('messages');
 
     res.status(200).json(chats);
   } catch (e) {
@@ -147,10 +147,8 @@ export const searchChats = async (req, res) => {
     const query = { creatorId };
 
     if (search) {
-      // Розділити пошуковий запит на частини
       const searchTerms = search.split(' ').filter((term) => term.length > 0);
 
-      // Створити масив умов для пошуку
       const searchConditions = searchTerms.map((term) => ({
         $or: [
           { 'receiver.firstname': { $regex: new RegExp(term, 'i') } },
@@ -158,7 +156,6 @@ export const searchChats = async (req, res) => {
         ],
       }));
 
-      // Об'єднати умови для пошуку
       query.$and = searchConditions;
     }
 

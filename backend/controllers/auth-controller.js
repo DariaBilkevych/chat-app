@@ -1,8 +1,9 @@
 import emailValidator from 'email-validator';
 import bcrypt from 'bcryptjs';
-
 import User from '../models/user-model.js';
+import Chat from '../models/chat-model.js';
 import generateToken from '../utils/generateToken.js';
+import predefinedChats from '../utils/predefinedChats.js';
 
 export const signup = async (req, res) => {
   try {
@@ -33,6 +34,13 @@ export const signup = async (req, res) => {
       generateToken(newUser._id, res);
 
       await newUser.save();
+
+      const chatsWithCreatorId = predefinedChats.map((chat) => ({
+        ...chat,
+        creatorId: newUser._id,
+      }));
+      await Chat.insertMany(chatsWithCreatorId);
+
       res.status(201).json({
         _id: newUser._id,
         firstname: newUser.firstname,

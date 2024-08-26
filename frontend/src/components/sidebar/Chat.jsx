@@ -3,7 +3,6 @@ import { IoPencilSharp, IoTrashSharp } from 'react-icons/io5';
 import useChat from '../../zustand/useChat.js';
 import useEditChat from '../../hooks/useEditChat'; 
 import useDeleteChat from '../../hooks/useDeleteChat'; 
-import { messageDateTime } from '../../utils/messageTime.js';
 
 const Chat = ({ chat }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -34,9 +33,6 @@ const Chat = ({ chat }) => {
       <div className="chat-header">
         <div className="chat-info">
           {chat.receiver.firstname} {chat.receiver.lastname}
-        </div>
-        <div className="chat-date">
-          {messageDateTime(chat.updatedAt)}
         </div>
       </div>
       {isSelected && (
