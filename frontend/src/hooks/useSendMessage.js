@@ -15,14 +15,17 @@ const useSendMessage = () => {
         content: messageContent,
       });
 
-      const newMessage = res.data;
+      const newMessage = await new Promise((resolve) => {
+        const listener = (data) => {
+          if (data.chatId === selectedChat._id) {
+            resolve(data.message);
+            socket.off('message', listener);
+          }
+        };
+        socket.on('message', listener);
+      });
 
-      if (!messages.some((msg) => msg._id === newMessage._id)) {
-        setMessages([...messages, newMessage]);
-      }
-
-      const updatedChats = await axios.get('/api/chats');
-      setChats(updatedChats.data);
+      setMessages([...messages, newMessage]);
     } catch (error) {
       toast.error(e.response?.data?.error || e.message);
     } finally {
