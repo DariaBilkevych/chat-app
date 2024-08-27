@@ -14,7 +14,10 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (authUser && !socket) {
-            const socket = io("https://chat-app-5w1i.onrender.com");
+            const socket = io("https://chat-app-5w1i.onrender.com", {
+                transports: ['websocket'],
+                withCredentials: true,
+            });
     
             socket.on('message', (message) => {
                 console.log('New message received:', message);
