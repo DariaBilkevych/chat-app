@@ -13,22 +13,21 @@ export const SocketContextProvider = ({ children }) => {
     const { authUser } = useAuthContext();
 
     useEffect(() => {
-        if (authUser) {
+        if (authUser && !socket) {
             const socket = io("https://chat-app-5w1i.onrender.com");
-
+    
             socket.on('message', (message) => {
                 console.log('New message received:', message);
-            })
-
+            });
+    
             setSocket(socket);
-            return () => socket.close();
-        } else {
-            if (socket) {
+            return () => {
                 socket.close();
                 setSocket(null);
-            }
+            };
         }
     }, [authUser]);
+    
 
     return (
         <SocketContext.Provider value={{socket}}>

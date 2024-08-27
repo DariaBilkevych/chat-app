@@ -102,6 +102,7 @@
 .message-and-edit {
   display: flex;
   align-items: center;
+  max-width: 60%;
 }
 
 .edit-button-chat {

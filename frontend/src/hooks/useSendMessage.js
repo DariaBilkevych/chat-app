@@ -16,7 +16,10 @@ const useSendMessage = () => {
       });
 
       const newMessage = res.data;
-      setMessages([...messages, newMessage]);
+
+      if (!messages.some((msg) => msg._id === newMessage._id)) {
+        setMessages([...messages, newMessage]);
+      }
 
       const updatedChats = await axios.get('/api/chats');
       setChats(updatedChats.data);
